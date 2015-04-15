@@ -115,7 +115,7 @@ Less dramatic definition:
 
 **Sweave except for HTML**
 
-I made this presentation using R Markdown. See the source in my [GitHub repository](https://github.com/liangcj/toolspresentation). In particular `ToolsPresentation.Rmd`
+I made this presentation using R Markdown. See the source in my [GitHub repository](https://github.com/liangcj/toolspresentation). In particular `index.Rmd`
 
 ## R Markdown
 `.Rmd` code for slide 4 (this is what you see and touch):
