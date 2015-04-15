@@ -191,7 +191,7 @@ Options for using:
 - Command line ([here](https://try.github.io/levels/1/challenges/1) is an interactive tutorial)
 
 ## Other Git/GitHub notes
-GitHub repositories are public. Can pay money for private repos (though [educational discount](https://education.github.com/) gives you 5 free private repos).
+GitHub repositories are public. Private repos cost money (though [educational discount](https://education.github.com/) gives you 5 free private repos).
 
 GitHub can render markdown files into html for you.
 
