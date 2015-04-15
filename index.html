@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tools for streamlining your workflow</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="generator" content="pandoc" />
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" media="all" href="index_files/ioslides-13.5.1/fonts/fonts.css">
+
+  <link rel="stylesheet" media="all" href="index_files/ioslides-13.5.1/theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="index_files/ioslides-13.5.1/theme/css/phone.css">
+
+  <base target="_blank">
+
+  <script type="text/javascript">
+    var SLIDE_CONFIG = {
+      // Slide settings
+      settings: {
+                title: 'Tools for streamlining your workflow',
+                        useBuilds: true,
+        usePrettify: true,
+        enableSlideAreas: true,
+        enableTouch: true,
+              },
+
+      // Author information
+      presenters: [
+            {
+        name: 'C. Jason Liang'
+      },
+            ]
+    };
+  </script>
+
+  <style type="text/css">
+
+    b, strong {
+      font-weight: bold;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    slides > slide {
+      -webkit-transition: all 0.4s ease-in-out;
+      -moz-transition: all 0.4s ease-in-out;
+      -o-transition: all 0.4s ease-in-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .auto-fadein {
+      -webkit-transition: opacity 0.6s ease-in;
+      -webkit-transition-delay: 0.4s;
+      -moz-transition: opacity 0.6s ease-in 0.4s;
+      -o-transition: opacity 0.6s ease-in 0.4s;
+      transition: opacity 0.6s ease-in 0.4s;
+      opacity: 0;
+    }
+
+  </style>
+
+
+
+</head>
+
+<body style="opacity: 0">
+
+<slides>
+
+  <slide class="title-slide segue nobackground">
+        <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+            <p style="margin-top: 6px; margin-left: -2px;">Monday, April 13, 2015</p>
+          </hgroup>
+  </slide>
+
+<slide class=''><hgroup><h2>Overview</h2></hgroup><article  id="overview">
+
+<p>Tools to minimize mental overhead and bookkeeping</p>
+
+<ul>
+<li><code>dplyr</code> and pipes (<code>%&gt;%</code>)</li>
+<li>R Markdown</li>
+<li>Git and GitHub</li>
+</ul>
+
+<p>Common theme: making existing tools more user friendly. Really easy to pick up!!!</p>
+
+</article></slide><slide class=''><hgroup><h2>Credits</h2></hgroup><article  id="credits">
+
+<p><a href='http://www.fields.utoronto.ca/video-archive/2015/02/318-4374' title=''>Jenny Bryan&#39;s presentation</a>: inspiration for much of this talk</p>
+
+<p><a href='http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html' title=''>dplyr tutorial</a></p>
+
+<p><a href='http://blog.rstudio.org/2014/12/01/magrittr-1-5/' title=''>magrittr tutorial</a>: <code>R</code> package for pipes (<code>%&gt;%</code>)</p>
+
+<p><a href='http://rmarkdown.rstudio.com/' title=''>R Markdown documentation</a></p>
+
+<p><a href='https://education.github.com/' title=''>GitHub education discount</a>: 5 private repos for free</p>
+
+<p><a href='https://pages.github.com/' title=''>Hosting your webpage on GitHub</a></p>
+
+<p><a href='http://stat545-ubc.github.io/block022_regular-expression.html' title=''>stringr tutorial</a></p>
+
+<p><a href='http://www.sqlite.org/queryplanner.html' title=''>SQLite tutorial</a>: primer on SQL syntax</p>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr">
+
+<p>In the PBC dataset, among the first 312 observations and those with observed times between 1000 and 3000 days, what was the average bilirubin level?</p>
+
+<pre class = 'prettyprint lang-r'>library(survival)
+head(pbc[, 1:12])</pre>
+
+<pre >##   id time status trt   age sex ascites hepato spiders edema bili chol
+## 1  1  400      2   1 58.77   f       1      1       1   1.0 14.5  261
+## 2  2 4500      0   1 56.45   f       0      1       1   0.0  1.1  302
+## 3  3 1012      2   1 70.07   m       0      0       0   0.5  1.4  176
+## 4  4 1925      2   1 54.74   f       0      1       1   0.5  1.8  244
+## 5  5 1504      1   2 38.11   f       0      1       1   0.0  3.4  279
+## 6  6 2503      2   2 66.26   f       0      1       0   0.0  0.8  248</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-1">
+
+<pre class = 'prettyprint lang-r'>mean(pbc[1:312,][pbc[1:312,]$time&gt;1000 &amp; pbc[1:312,]$time&lt;3000, &quot;bili&quot;])</pre>
+
+<pre >## [1] 2.528</pre>
+
+<pre class = 'prettyprint lang-r'>mean(subset(pbc[1:312, ], time&gt;1000 &amp; time&lt;3000)$bili)</pre>
+
+<pre >## [1] 2.528</pre>
+
+<p>Concise but difficult to read code</p>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-2">
+
+<pre class = 'prettyprint lang-r'>pbc312 &lt;- pbc[1:312, ]
+pbcsub &lt;- pbc312[pbc312$time&gt;1000 &amp; pbc312$time&lt;3000, ]
+mean(pbcsub$bili)</pre>
+
+<pre >## [1] 2.528</pre>
+
+<p>Easier to read but clutters workspace with unnecessary variables</p>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-3">
+
+<pre class = 'prettyprint lang-r'>library(dplyr)
+pbc %&gt;%
+  slice(1:312) %&gt;%
+  filter(time&gt;1000 &amp; time&lt;3000) %&gt;%
+  summarise(mean(bili))</pre>
+
+<pre >##   mean(bili)
+## 1      2.528</pre>
+
+<p>intuitive functions + piping!</p>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-4">
+
+<p>What are the average log(bilirubin) levels for each sex?</p>
+
+<pre class = 'prettyprint lang-r'>pbc %&gt;%
+  slice(1:312) %&gt;%
+  mutate(lbili=log(bili)) %&gt;%
+  group_by(sex) %&gt;%
+  summarise(mean(lbili))</pre>
+
+<pre >## Source: local data frame [2 x 2]
+## 
+##   sex mean(lbili)
+## 1   m      0.7736
+## 2   f      0.5499</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-5">
+
+<p>Cox regression on age and log(bilirubin)</p>
+
+<pre class = 'prettyprint lang-r'>pbc %&gt;%
+  slice(1:312) %&gt;%
+  mutate(status01=(status==2)*1, lbili=log(bili)) %&gt;%
+  coxph(Surv(time, status01)~age+lbili, data=.)</pre>
+
+<pre >## Call:
+## coxph(formula = Surv(time, status01) ~ age + lbili, data = .)
+## 
+## 
+##         coef exp(coef) se(coef)     z       p
+## age   0.0385      1.04  0.00822  4.68 2.9e-06
+## lbili 1.0763      2.93  0.09180 11.72 0.0e+00
+## 
+## Likelihood ratio test=155  on 2 df, p=0  n= 312, number of events= 125</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-6">
+
+<ul>
+<li>Set of functions that streamline and standardize syntax of some base <code>R</code> functions</li>
+<li>Piping paradigm (optional but useful)
+
+<ul>
+<li>RStudio shortcut for <code>%&gt;%</code>: <code>Ctrl-Shift-M</code> (Windows/Linux), <code>Cmd+Shift+M</code> (Mac)</li>
+</ul></li>
+<li>Works on <code>data.frame</code>, <code>data.table</code>, and even SQL databases</li>
+<li><code>tbl</code>: wrapper for <code>data.frame</code> for nicer default printing</li>
+</ul>
+
+<p>Pipes may not seem profound at first glance, but consider the frequent scenario where you (or a collaborator!) revisit months-old code and waste minutes/hours deciphering your code. Pipes make your code much easier for a human to read.</p>
+
+<p>Not convinced? Maybe an <a href='http://www.fields.utoronto.ca/video-archive/2015/02/318-4371' title=''>hour-long presentation</a> by Hadley Wickham will.</p>
+
+</article></slide><slide class=''><hgroup><h2><code>tidyr</code></h2></hgroup><article  id="tidyr">
+
+<p>I won&#39;t focus on this here, but if your data is really messy then <code>tidyr</code> will help. Use <code>tidyr</code> to &quot;tidy&quot; your messy data, and then <code>dplyr</code> to ready for analysis.</p>
+
+<p><strong>Example</strong>: longitudinal measurements for an individual are in the same row but each observation time should have its own row. <code>tidyr</code> functions can help.</p>
+
+<p><a href='http://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html' title=''>Here</a> is an introduction.</p>
+
+</article></slide><slide class=''><hgroup><h2>R Markdown</h2></hgroup><article  id="r-markdown">
+
+<p>Overly dramatic definition:</p>
+
+<p><strong>R Markdown is a way to avoid terrible things like HTML or LaTeX.</strong></p>
+
+<p>Less dramatic definition:</p>
+
+<p><strong>Sweave except for HTML</strong></p>
+
+<p>I made this presentation using R Markdown. See the source in my <a href='https://github.com/liangcj/toolspresentation' title=''>GitHub repository</a>. In particular <code>ToolsPresentation.Rmd</code></p>
+
+</article></slide><slide class=''><hgroup><h2>R Markdown</h2></hgroup><article  id="r-markdown-1">
+
+<p><code>.Rmd</code> code for slide 4 (this is what you see and touch):</p>
+
+<img src='rmdcode.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>R Markdown</h2></hgroup><article  id="r-markdown-2">
+
+<p><code>.md</code> code for slide 4 (intermediate file that is auto-generated from the <code>.Rmd</code> file):</p>
+
+<img src='mdcode.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>R Markdown</h2></hgroup><article  id="r-markdown-3">
+
+<p><code>.html</code> code for slide 4 (what the web browser sees; auto-generated from the <code>.md</code> file):</p>
+
+<img src='htmlcode.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>R Markdown</h2></hgroup><article  id="r-markdown-4">
+
+<p>This is what your audience members see (web browser turns <code>.html</code> into human readable format):</p>
+
+<img src='slide4.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>R Markdown</h2></hgroup><article  id="r-markdown-5">
+
+<p>I still think it&#39;s important to learn HTML and LaTeX, in the same way I think it&#39;s important to learn how to do long division and integrate by parts using a pencil and paper.</p>
+
+<p><img src='longd.png' title=''/> <img src='intparts.jpg' title=''/></p>
+
+</article></slide><slide class=''><hgroup><h2>R Markdown</h2></hgroup><article  id="r-markdown-6">
+
+<p>When I click &quot;Knit HTML&quot; in RStudio, it&#39;s just running <code>render()</code> from the <code>rmarkdown</code> package.</p>
+
+<p>Takes my R Markdown (<code>.Rmd</code>) file, converts to a Markdown (<code>.md</code>) file, and finally to an HTML file (<code>.html</code>). All three of these files are in my repository for reference. In practice, the only file you need to touch is the <code>.Rmd</code> file.</p>
+
+<p>Backend: <code>render()</code> in turn uses <code>knitr</code> (R package by <a href='https://github.com/yihui' title=''>Yihui Xie</a>) and <code>pandoc</code> (&quot;swiss-army knife&quot; document format converter)</p>
+
+</article></slide><slide class=''><hgroup><h2>Why so many steps?</h2></hgroup><article  id="why-so-many-steps">
+
+<p>Web browsers convert HTML code to the websites you see. So to make websites, people used to code directly in HTML.</p>
+
+<p><a href='http://daringfireball.net/projects/markdown/' title=''>John Gruber</a> got tired of the cumbersome &quot;markups&quot; needed even for simple HTML documents, so created Mark<em>down</em>, a language that simplifies frequently used HTML commands.</p>
+
+<p>Example: to italicize text, type <code>*italics*</code> instead of <code>&lt;em&gt;italics&lt;/em&gt;</code>)</p>
+
+<p>John Gruber is not a statistician though. Luckily, the RStudio people are, so they created R Markdown, which allows you to embed R code in Markdown files, similar to how Sweave allows you to embed R code in LaTeX files.</p>
+
+</article></slide><slide class=''><hgroup><h2>Life without version control =(</h2></hgroup><article  id="life-without-version-control" class="centered">
+
+<img src='filesoup.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Git</h2></hgroup><article  id="git" class="centered">
+
+<p>Developed by Linus Torvalds (creator of Linux) in 2005</p>
+
+<img src='linus.jpg' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Git</h2></hgroup><article  id="git-1" class="centered">
+
+<p><strong>Open source</strong> version control</p>
+
+<img src='git.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Git/GitHub</h2></hgroup><article  id="gitgithub" class="centered">
+
+<img src='github.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>GitHub</h2></hgroup><article  id="github">
+
+<ul>
+<li>Run by a <a href='https://github.com/liangcj' title=''>for profit company</a></li>
+<li>Think Dropbox where you have to manually backup and write a quick summary of what changed.</li>
+<li>Added social component</li>
+</ul>
+
+<p>Alternatives: GitLab, Bitbucket (but GitHub is the dominant product)</p>
+
+<p>Options for using:</p>
+
+<ul>
+<li>RStudio interface</li>
+<li>Programs developed by GitHub for <a href='https://windows.github.com/' title=''>Windows</a> or <a href='https://mac.github.com/' title=''>Mac</a></li>
+<li>Yet more <a href='http://git-scm.com/downloads/guis' title=''>3rd party programs</a></li>
+<li>Command line (<a href='https://try.github.io/levels/1/challenges/1' title=''>here</a> is an interactive tutorial)</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Other Git/GitHub notes</h2></hgroup><article  id="other-gitgithub-notes">
+
+<p>GitHub repositories are public. Can pay money for private repos (though <a href='https://education.github.com/' title=''>educational discount</a> gives you 5 free private repos).</p>
+
+<p>GitHub can render markdown files into html for you.</p>
+
+<p>Host class or <a href='https://github.com/liangcj/liangcj.github.io' title=''>personal webpages</a> (GitHub uses <a href='https://pages.github.com/' title=''>Jekyll</a>).</p>
+
+<p><a href='https://pages.github.com/' title=''>Simple tutorial</a> for using GitHub to host your website.</p></article></slide>
+
+
+  <slide class="backdrop"></slide>
+
+</slides>
+
+<script src="index_files/ioslides-13.5.1/js/modernizr.custom.45394.js"></script>
+<script src="index_files/ioslides-13.5.1/js/prettify/prettify.js"></script>
+<script src="index_files/ioslides-13.5.1/js/prettify/lang-r.js"></script>
+<script src="index_files/ioslides-13.5.1/js/prettify/lang-yaml.js"></script>
+<script src="index_files/ioslides-13.5.1/js/hammer.js"></script>
+<script src="index_files/ioslides-13.5.1/js/slide-controller.js"></script>
+<script src="index_files/ioslides-13.5.1/js/slide-deck.js"></script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+<!-- map slide visiblity events into shiny -->
+<script>
+  (function() {
+    if (window.jQuery) {
+       window.jQuery(document).on('slideleave', function(e) {
+         window.jQuery(e.target).trigger('hidden');
+      });
+       window.jQuery(document).on('slideenter', function(e) {
+         window.jQuery(e.target).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
